@@ -1,7 +1,8 @@
 const express = require('express');
 const app 	  = express();
-
-const PORT = process.env.PORT || 3000;
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const PORT = process.env.PORT || 9000;
 
 
 require('./db/db');
@@ -19,9 +20,12 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
   
+app.use('/deadoralive',AdminController);
+
 app.get('/',(req,res)=>{
     res.render('index.ejs')
 })
+
 
 
 
