@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/deadoralive', {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://cluster0-w46tm.mongodb.net/test', {
   useNewUrlParser: true,
   useCreateIndex: true,
-  useFindAndModify: false
+  useFindAndModify: false,
+  user:'zi',
+  pass:'zi', 
 });
 
 mongoose.connection.on('connected', () => {
