@@ -2,15 +2,12 @@ const express = require('express');
 const app 	  = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const PORT = process.env.PORT || 9000;
-
 
 require('./db/db');
 
-const AdminController = require('./controllers/adminController');
-const WillController = require('./controllers/wiilContrroller');
-const lawyerController = require('./controllers/lawyerController');
+const PORT = process.env.PORT || 9000;
 
+// middleware
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
@@ -21,18 +18,24 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions));
-  
-app.use('/deadoralive/user',AdminController);
-app.use('/deadoralive/will', WillController);
-app.use('/deadoralive/lawyer',lawyerController);
 
-app.get('/',(req,res)=>{
-    res.render('index.ejs')
-})
 
-app.get('/deadoralive',(req,res)=>{
-    res.render('deadoralive.ejs')
-})
+const adminController = require('./controllers/adminController');
+const willController = require('./controllers/wiilContrroller');
+const lawyerController = require('./controllers/lawyerController');
+
+
+app.use('/deadoralive/user',  adminController);
+app.use('/deadoralive/will',  willController);
+app.use('/deadoralive/lawyer', lawyerController);
+
+// app.get('/',(req,res)=>{
+//     res.render('index.ejs')
+// })
+
+// app.get('/deadoralive', (req,res)=>{
+//     res.render('deadoralive.ejs')
+// })
 
 
 
