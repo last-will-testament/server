@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/hexotheme1', {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/deadoralive', {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false
