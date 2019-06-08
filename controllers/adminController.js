@@ -14,27 +14,19 @@ router.get('/new',(req,res)=>{
     res.render('new.ejs')
 })
 
-router.post('/',(req,res)=>{
-    const username = req.body.username;
-    const contactNumber = req.body.contactNumber;
-    const contactEmail = req.body.contactEmail;
-    const NewUser={
-        username:username,
-        contactNumber:contactNumber,
-        contactEmail:contactEmail,
-    }
+router.post('/', async(req, res) => {
     try{
-        Users.create(NewUser,(err,createUser)=>{
-            if(err){
-                res.send(err)
-            }else{
-                res.redirect('/')
-            }
-        })
-    }catch(error){
-        res.send(error)
+      const createdUser= await Users.create(req.body);
+      console.log(`Created Users: ${createdUser}`);
+      res.json({
+        status:200,
+        data: createdUser
+      })
+      console.log("post success")
+    }catch(err){
+      res.send(err)
     }
-})
+});
 
 
 module.exports = router;

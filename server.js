@@ -22,7 +22,9 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
   
-app.use('/deadoralive',AdminController, WillController,lawyerController);
+app.use('/deadoralive/user',AdminController);
+app.use('/deadoralive/will', WillController);
+app.use('/deadoralive/lawyer',lawyerController);
 
 app.get('/',(req,res)=>{
     res.render('index.ejs')
