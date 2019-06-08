@@ -1,30 +1,30 @@
 const express = require('express');
 const router = express.Router();
-const Users = require('../models/User');
+const Wills = require('../models/Wills');
 
 
 router.get('/',async (req,res)=>{
-    const allUsers = await Users.find({});
+    const allWills = await Wills.find({});
     res.render('deadoralive.ejs',{
-        users:allUsers,
+        wills:allWills,
     })
 })
 
 router.get('/new',(req,res)=>{
-    res.render('new.ejs')
+    res.render('newWill.ejs')
 })
 
 router.post('/',(req,res)=>{
     const username = req.body.username;
     const contactNumber = req.body.contactNumber;
     const contactEmail = req.body.contactEmail;
-    const NewUser={
+    const NewWill={
         username:username,
         contactNumber:contactNumber,
         contactEmail:contactEmail,
     }
     try{
-        Users.create(NewUser,(err,createUser)=>{
+        Wills.create(NewWill,(err,createWill)=>{
             if(err){
                 res.send(err)
             }else{
