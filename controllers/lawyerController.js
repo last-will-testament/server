@@ -16,7 +16,18 @@ const Lawyer = require('../models/Lawyer');
 //     }
 // });
 
-
+//GET all wills..
+router.get('/', async(req, res) => {
+  try{
+    const allLawyer = await Lawyer.find();
+    res.json({
+      status: 200,
+      data: allLawyer
+    })
+  }catch(err){
+      res.send(err)
+  }
+});
 
 //POST - create Wills
 router.post('/', async(req, response) => {
