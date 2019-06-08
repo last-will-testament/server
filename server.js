@@ -8,6 +8,8 @@ const PORT = process.env.PORT || 9000;
 require('./db/db');
 
 const AdminController = require('./controllers/adminController');
+const WillController = require('./controllers/wiilContrroller');
+const lawyerController = require('./controllers/lawyerController');
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
@@ -20,10 +22,14 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
   
-app.use('/deadoralive',AdminController);
+app.use('/deadoralive',AdminController, WillController,lawyerController);
 
 app.get('/',(req,res)=>{
     res.render('index.ejs')
+})
+
+app.get('/deadoralive',(req,res)=>{
+    res.render('deadoralive.ejs')
 })
 
 
