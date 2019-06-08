@@ -1,9 +1,13 @@
 const express = require('express');
-const app 	  = express();
+const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const PORT = process.env.PORT || 9000;
 
+const {PubSub} = require('@google-cloud/pubsub');
+const pubsub = new PubSub();
+
+const tasks = require('./controllers/docusignController.js');
 
 require('./db/db');
 
@@ -26,7 +30,24 @@ app.get('/',(req,res)=>{
     res.render('index.ejs')
 })
 
+let testSubscription = () => {
+  gmail.users.watch({
+    userId: "duanshu.translations@gmail.com",
+    resource: {
+        topicName: "projects/dead-or-alive-243118/topics/Linden",
+        labelIds: ["INBOX"]
+    }
+});
+}
 
+
+app.get('/user',(req,res)=>{//test subscription
+    testSubscription();
+})
+
+app.post('/alive',(req,res)=>{
+    
+})
 
 
 app.listen(PORT,()=>{

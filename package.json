@@ -18,12 +18,15 @@
   },
   "homepage": "https://github.com/last-will-testament/server#readme",
   "dependencies": {
+    "@google-cloud/pubsub": "^0.29.1",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "ejs": "^2.6.1",
     "express": "^4.17.1",
     "express-session": "^1.16.1",
+    "googleapis": "^40.0.0",
     "mongoose": "^5.5.14",
-    "react-router-dom": "^5.0.1"
+    "react-router-dom": "^5.0.1",
+    "save": "^2.4.0"
   }
 }

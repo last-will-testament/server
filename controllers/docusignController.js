@@ -1,6 +1,6 @@
 const helpers = {
 
-  scheduleEvents: function() {
+  taskScheduler: function() {
 
   },
 
