@@ -2,34 +2,19 @@ const express = require('express');
 const router = express.Router();
 const Lawyer = require('../models/Lawyer');
 
-router.get('/',async (req,res)=>{
-    const allLawyer = await Lawyer.find({});
-    res.render('deadoralive.ejs',{
-        layers:allLawyer,
-    })
-})
-
-router.post('/',(req,res)=>{
-    const username = req.body.username;
-    const contactNumber = req.body.contactNumber;
-    const contactEmail = req.body.contactEmail;
-    const NewLawyer={
-        username:username,
-        contactNumber:contactNumber,
-        contactEmail:contactEmail,
-    }
+router.post('/', async(req, res) => {
     try{
-        Lawyer.create(NewLawyer,(err,createLawyer)=>{
-            if(err){
-                res.send(err)
-            }else{
-                res.redirect('/')
-            }
-        })
-    }catch(error){
-        res.send(error)
+      const createdLawyerr= await Users.create(req.body);
+      console.log(`Created Users: ${createdUser}`);
+      res.json({
+        status:200,
+        data: createdUser
+      })
+      console.log("post success")
+    }catch(err){
+      res.send(err)
     }
-})
+});
 
 
 module.exports = router;
