@@ -6,11 +6,13 @@ const PORT = process.env.PORT || 9000;
 
 const fs = require('fs');
 const readline = require('readline');
-const {google} = require('googleapis');
+//const {google} = require('googleapis');
+const googleAuth = require('google-auth-library');
 const {PubSub} = require('@google-cloud/pubsub');
 const pubsub = new PubSub();
 
 const tasks = require('./controllers/docusignController.js');
+//const auth = require('./auth.json');
 
 require('./db/db');
 
@@ -33,31 +35,67 @@ app.get('/',(req,res)=>{
     res.render('index.ejs')
 })
 
-const gmail = google.gmail('v1');
-const oauth2Client = new OAuth2('444985803644-pi65sb0ev4kinsu2fk8arqvo8tgf7v7f.apps.googleusercontent.com', 'rZ_mtqgos6gb-J3uVtMM7QWK', 'http://localhost:9000/');
-const scopes = [
-  'https://www.googleapis.com/auth/gmail',
+// const gmail = google.gmail('v1');
+//const oauth2Client = new OAuth2('444985803644-pi65sb0ev4kinsu2fk8arqvo8tgf7v7f.apps.googleusercontent.com', 'rZ_mtqgos6gb-J3uVtMM7QWK', 'http://localhost:9000/');
+// const scopes = [
+//   'https://www.googleapis.com/auth/gmail',
+//   'https://www.googleapis.com/auth/pubsub'
+// ];
+
+// const url = oauth2Client.generateAuthUrl({
+//   // 'online' (default) or 'offline' (gets refresh_token)
+//   access_type: 'offline',
+
+//   // If you only need one scope you can pass it as a string
+//   scope: scopes
+// });
+
+//async main();
+
+const google = require("googleapis"); 
+const { OAuth2Client } = require("google-auth-library");
+const credentials = require('./client_id.json');
+
+let clientSecret = credentials.web.client_secret;
+let clientId = credentials.web.client_id;
+let redirectUrl = credentials.web.redirect_uris[0];
+
+const SCOPES = [
+  'https://www.googleapis.com/auth/gmail.send',
   'https://www.googleapis.com/auth/pubsub'
 ];
 
-const url = oauth2Client.generateAuthUrl({
-  // 'online' (default) or 'offline' (gets refresh_token)
-  access_type: 'offline',
+const auth = new OAuth2Client(clientId, clientSecret, redirectUrl);
 
-  // If you only need one scope you can pass it as a string
-  scope: scopes
+app.get('/connect', (req, res) => {
+   let authUrl = auth.generateAuthUrl({
+      access_type: 'offline',
+      scope: SCOPES
+   });
+   res.redirect(authUrl);
 });
 
-const {tokens} = await oauth2Client.getToken(code)
-oauth2Client.setCredentials(tokens);
+app.get('/auth/callback', (req, res) => {
 
-oauth2Client.on('tokens', (tokens) => {
-  if (tokens.refresh_token) {
-    // store the refresh_token in my database!
-    console.log(tokens.refresh_token);
-  }
-  console.log(tokens.access_token);
+  return auth.getToken(req.query.code, (err, token) => {
+    auth.credentials = token;
+    runSample(auth);
+  });
 });
+
+// const OAuth2 = google.auth.OAuth2;
+// const oauth2Client = new OAuth2('444985803644-pi65sb0ev4kinsu2fk8arqvo8tgf7v7f.apps.googleusercontent.com', 
+//   'rZ_mtqgos6gb-J3uVtMM7QWK', 
+//   'http://localhost:9000/');
+// oauth2Client.setCredentials(auth);
+
+// oauth2Client.on('tokens', (tokens) => {
+//   if (tokens.refresh_token) {
+//     // store the refresh_token in my database!
+//     console.log(tokens.refresh_token);
+//   }
+//   console.log(tokens.access_token);
+// });
 
 let testSubscription = (auth) => {
   
@@ -70,9 +108,11 @@ let testSubscription = (auth) => {
 });
 }
 
-async function runSample() {
+
+async function runSample(auth) {
   // You can use UTF-8 encoding for the subject using the method below.
   // You can also just use a plain string if you don't need anything fancy.
+  const gmail = google.gmail({version: 'v1', auth: auth});
   const subject = 'Status Check';
   const utf8Subject = `=?utf-8?B?${Buffer.from(subject).toString('base64')}?=`;
   const messageParts = [
@@ -110,7 +150,7 @@ app.get('/user',(req,res)=>{//test subscription
 })
 
 app.post('/alive',(req,res)=>{
-    
+    runSample();
 })
 
 
