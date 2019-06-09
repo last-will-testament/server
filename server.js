@@ -6,13 +6,11 @@ const PORT = process.env.PORT || 9000;
 
 const fs = require('fs');
 const readline = require('readline');
-//const {google} = require('googleapis');
 const googleAuth = require('google-auth-library');
-const {PubSub} = require('@google-cloud/pubsub');
-const pubsub = new PubSub();
+// const {PubSub} = require('@google-cloud/pubsub');
+// const pubsub = new PubSub();
 
 const tasks = require('./controllers/docusignController.js');
-//const auth = require('./auth.json');
 
 require('./db/db');
 
@@ -37,7 +35,7 @@ app.get('/',(req,res)=>{
 
 const { google } = require("googleapis"); 
 const { OAuth2Client } = require("google-auth-library");
-const credentials = require('./client_id.json');
+const credentials = require('./client_id.json');//required
 
 let clientSecret = credentials.web.client_secret;
 let clientId = credentials.web.client_id;
@@ -66,16 +64,16 @@ app.get('/auth/callback', (req, res) => {
   });
 });
 
-let testSubscription = (auth) => {
+// let testSubscription = (auth) => {
   
-  gmail.users.watch({
-    userId: "duanshu.translations@gmail.com",
-    resource: {
-        topicName: "projects/dead-or-alive-243118/topics/Linden",
-        labelIds: ["INBOX"]
-    }
-});
-}
+//   gmail.users.watch({
+//     userId: "duanshu.translations@gmail.com",
+//     resource: {
+//         topicName: "projects/dead-or-alive-243118/topics/Linden",
+//         labelIds: ["INBOX"]
+//     }
+// });
+// }
 
 async function runSample(auth) {
   // You can use UTF-8 encoding for the subject using the method below.
@@ -85,7 +83,7 @@ async function runSample(auth) {
   const utf8Subject = `=?utf-8?B?${Buffer.from(subject).toString('base64')}?=`;
   const messageParts = [
     'From: Living Dead <duanshu.translations@gmail.com>',
-    'To: Linden Chiu <linden1023@hotmail.com>',
+    'To: Linden Chiu <linden1023@hotmail.com>',//user'sname and e-mail goes here
     'Content-Type: text/html; charset=utf-8',
     'MIME-Version: 1.0',
     `Subject: ${utf8Subject}`,
@@ -113,12 +111,12 @@ async function runSample(auth) {
 }
 
 
-app.get('/user',(req,res)=>{//test subscription
-    testSubscription();
-})
+// app.get('/user',(req,res)=>{//test subscription
+//     testSubscription();
+// })
 
 app.post('/alive',(req,res)=>{
-    runSample();
+   //hits, don't send will
 })
 
 
