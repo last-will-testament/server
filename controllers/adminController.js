@@ -14,7 +14,20 @@ router.get('/', async(req, res) => {
         res.send(err)
     }
   });
-  
+
+  //GET one will...
+  router.get('/:id', async(req, res) => {
+    try{
+      const foundUser = await Users.findById(req.params.id)
+      res.json({
+        status: 200,
+        data: foundUser
+      })
+    }catch(err){
+      res.send(err)
+    }
+  });
+
   //POST - create Wills
 router.post('/', async(req, response) => {
     try{

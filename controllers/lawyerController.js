@@ -17,6 +17,20 @@ router.get('/', async(req, res) => {
   }
 });
 
+//GET one will...
+router.get('/:id', async(req, res) => {
+  try{
+    const foundLawyer = await Lawyer.findById(req.params.id)
+    res.json({
+      status: 200,
+      data: foundLawyer
+    })
+  }catch(err){
+    res.send(err)
+  }
+});
+
+
 //POST - create Wills
 router.post('/', async(req, response) => {
   try{

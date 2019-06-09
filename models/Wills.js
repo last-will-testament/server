@@ -4,10 +4,10 @@ const WillSchema = new mongoose.Schema({
     kinName:String,
     kinNumber:Number,
     kinEmail:String,
-    Description:String,
+    description:String,
 })
 
 
-const Will = mongoose.model("Will",WillSchema);
+const Will = mongoose.model("Will", WillSchema);
 
 module.exports = Will;
