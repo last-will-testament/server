@@ -29,21 +29,23 @@ router.get('/', async(req, res) => {
   }
 });
 
-//POST - create Wills
+//POST - create lawyers
 router.post('/', async(req, response) => {
+  // console.log('1');
   try{
+    // console.log('waht is req.body', req.body);
     const createdLawyer = await Lawyer.create(req.body);
     //we don't have login so we don't need this....
     // createdWills.authorId = req.session.userId;
     // createdWills.authorname = req.session.username;
-
+    console.log('2');
     createdLawyer.save((err, savedLawyer) => {
       response.json({
         status: 200,
         data: savedLawyer,
       })
     })
-
+    console.log('3');
   }catch(err){
     console.log('error????_?');
     response.send(err)

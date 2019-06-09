@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 
 
 const UserSchema = new mongoose.Schema({
-    username:String,
-    contactNumber:Number,
-    contactEmail:String,   
+  username: {type: String},
+  contactNumber:{type: Number},
+  contactEmail:{type: String},
 });
 
 const Users = mongoose.model('Users',UserSchema)

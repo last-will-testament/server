@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
 const WillSchema = new mongoose.Schema({
-    username:String,
-    contactNumber:Number,
-    contactEmail:String,
+    username: {type: String},
+    contactNumber:{type: Number},
+    contactEmail:{type: String},
 })
 
 
