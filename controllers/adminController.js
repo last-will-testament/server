@@ -3,30 +3,35 @@ const router = express.Router();
 const Users = require('../models/User');
 
 
-router.get('/',async (req,res)=>{
-    const allUsers = await Users.find({});
-    res.render('deadoralive.ejs',{
-        users:allUsers,
-    })
-})
-
-router.get('/new',(req,res)=>{
-    res.render('new.ejs')
-})
-
-router.post('/', async(req, res) => {
+//GET all wills..
+router.get('/', async(req, res) => {
     try{
-      const createdUser= await Users.create(req.body);
-      console.log(`Created Users: ${createdUser}`);
+      const allUser = await Users.find();
       res.json({
-        status:200,
-        data: createdUser
+        status: 200,
+        data: allUser
       })
-      console.log("post success")
     }catch(err){
-      res.send(err)
+        res.send(err)
     }
-});
+  });
+
+  //POST - create Wills
+router.post('/', async(req, response) => {
+    try{
+      const createdUser = await Users.create(req.body);
+      createdUser.save((err, savedUser) => {
+        response.json({
+          status: 200,
+          data: savedUser,
+        })
+      })
+    }catch(err){
+      console.log('error????_?');
+      response.send(err)
+    }
+  });
+
 
 
 module.exports = router;
