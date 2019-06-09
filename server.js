@@ -4,13 +4,13 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const PORT = process.env.PORT || 9000;
 
-const fs = require('fs');
-const readline = require('readline');
+// const fs = require('fs');
+// const readline = require('readline');
 const googleAuth = require('google-auth-library');
 // const {PubSub} = require('@google-cloud/pubsub');
 // const pubsub = new PubSub();
 
-const tasks = require('./controllers/docusignController.js');
+//const tasks = require('./controllers/docusignController.js');
 
 require('./db/db');
 
@@ -43,7 +43,6 @@ let redirectUrl = credentials.web.redirect_uris[0];
 
 const SCOPES = [
   'https://www.googleapis.com/auth/gmail.send',
-  'https://www.googleapis.com/auth/pubsub'
 ];
 
 const auth = new OAuth2Client(clientId, clientSecret, redirectUrl);
@@ -81,14 +80,15 @@ async function runSample(auth) {
   const gmail = google.gmail({version: 'v1', auth: auth});
   const subject = 'Status Check';
   const utf8Subject = `=?utf-8?B?${Buffer.from(subject).toString('base64')}?=`;
+  const user = 'To: Z <zzhao12@gmail.com>';
   const messageParts = [
-    'From: Living Dead <duanshu.translations@gmail.com>',
-    'To: Linden Chiu <linden1023@hotmail.com>',//user'sname and e-mail goes here
+    'From: Living Dead <@gmail.com>',
+     user,//user'sname and e-mail goes here
     'Content-Type: text/html; charset=utf-8',
     'MIME-Version: 1.0',
     `Subject: ${utf8Subject}`,
     '',
-    'Dead yet?',
+    'Are you dead yet?',
     'Reply to this e-mail if not.',
   ];
   const message = messageParts.join('\n');
