@@ -35,24 +35,7 @@ app.get('/',(req,res)=>{
     res.render('index.ejs')
 })
 
-// const gmail = google.gmail('v1');
-//const oauth2Client = new OAuth2('444985803644-pi65sb0ev4kinsu2fk8arqvo8tgf7v7f.apps.googleusercontent.com', 'rZ_mtqgos6gb-J3uVtMM7QWK', 'http://localhost:9000/');
-// const scopes = [
-//   'https://www.googleapis.com/auth/gmail',
-//   'https://www.googleapis.com/auth/pubsub'
-// ];
-
-// const url = oauth2Client.generateAuthUrl({
-//   // 'online' (default) or 'offline' (gets refresh_token)
-//   access_type: 'offline',
-
-//   // If you only need one scope you can pass it as a string
-//   scope: scopes
-// });
-
-//async main();
-
-const google = require("googleapis"); 
+const { google } = require("googleapis"); 
 const { OAuth2Client } = require("google-auth-library");
 const credentials = require('./client_id.json');
 
@@ -83,20 +66,6 @@ app.get('/auth/callback', (req, res) => {
   });
 });
 
-// const OAuth2 = google.auth.OAuth2;
-// const oauth2Client = new OAuth2('444985803644-pi65sb0ev4kinsu2fk8arqvo8tgf7v7f.apps.googleusercontent.com', 
-//   'rZ_mtqgos6gb-J3uVtMM7QWK', 
-//   'http://localhost:9000/');
-// oauth2Client.setCredentials(auth);
-
-// oauth2Client.on('tokens', (tokens) => {
-//   if (tokens.refresh_token) {
-//     // store the refresh_token in my database!
-//     console.log(tokens.refresh_token);
-//   }
-//   console.log(tokens.access_token);
-// });
-
 let testSubscription = (auth) => {
   
   gmail.users.watch({
@@ -107,7 +76,6 @@ let testSubscription = (auth) => {
     }
 });
 }
-
 
 async function runSample(auth) {
   // You can use UTF-8 encoding for the subject using the method below.
@@ -122,8 +90,8 @@ async function runSample(auth) {
     'MIME-Version: 1.0',
     `Subject: ${utf8Subject}`,
     '',
-    'Are you alive?',
-    'Reply to this e-mail.',
+    'Dead yet?',
+    'Reply to this e-mail if not.',
   ];
   const message = messageParts.join('\n');
 
@@ -135,7 +103,7 @@ async function runSample(auth) {
     .replace(/=+$/, '');
 
   const res = await gmail.users.messages.send({
-    userId: 'duanshu.translations@gmail.com>',
+    userId: 'duanshu.translations@gmail.com',
     requestBody: {
       raw: encodedMessage,
     },
