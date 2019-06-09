@@ -2,11 +2,9 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const axios = require('axios');
 const PORT = process.env.PORT || 9000;
 
-// const fs = require('fs');
-// const readline = require('readline');
-const googleAuth = require('google-auth-library');
 // const {PubSub} = require('@google-cloud/pubsub');
 // const pubsub = new PubSub();
 
@@ -60,6 +58,7 @@ app.get('/auth/callback', (req, res) => {
   return auth.getToken(req.query.code, (err, token) => {
     auth.credentials = token;
     runSample(auth);
+    //res.redirect('http://localhost:9000');
   });
 });
 
@@ -80,9 +79,10 @@ async function runSample(auth) {
   const gmail = google.gmail({version: 'v1', auth: auth});
   const subject = 'Status Check';
   const utf8Subject = `=?utf-8?B?${Buffer.from(subject).toString('base64')}?=`;
-  const user = 'To: Z <zzhao12@gmail.com>';
+  const user = 'To: L Chiu <hchiu87@gmail.com>';
+
   const messageParts = [
-    'From: Living Dead <@gmail.com>',
+    'From: Living Dead <duanshu.translations@gmail.com>',
      user,//user'sname and e-mail goes here
     'Content-Type: text/html; charset=utf-8',
     'MIME-Version: 1.0',
@@ -91,6 +91,7 @@ async function runSample(auth) {
     'Are you dead yet?',
     'Reply to this e-mail if not.',
   ];
+
   const message = messageParts.join('\n');
 
   // The body needs to be base64url encoded.
@@ -101,11 +102,12 @@ async function runSample(auth) {
     .replace(/=+$/, '');
 
   const res = await gmail.users.messages.send({
-    userId: 'duanshu.translations@gmail.com',
+    userId: 'me',
     requestBody: {
       raw: encodedMessage,
     },
-  });
+  })
+
   console.log(res.data);
   return res.data;
 }
@@ -119,6 +121,21 @@ app.post('/alive',(req,res)=>{
    //hits, don't send will
 })
 
+app.get('/dead',(req,res)=>{
+  axios({
+    method: 'GET',
+    url: 'http://localhost:3000/',
+    data: {
+      "email": "john@email.com",
+      "name": "John Doe",
+      "recipientId": "1",
+      "clientUserId": "1234"
+    }
+  }).then((res) => {
+    console.log(typeof res.data)
+    console.log(res.data); 
+  })
+})
 
 app.listen(PORT,()=>{
 	console.log("App is listening at : ", PORT);
